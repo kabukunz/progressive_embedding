@@ -7,7 +7,7 @@
 
 #include "is_simple_polygon.h"
 #include <igl/copyleft/cgal/orient2D.h>
-#include <igl/copyleft/cgal/segment_segment_intersect.h>
+#include <igl/predicates/segment_segment_intersect.h>
 
 
 typedef std::tuple<double,double,int> Point;

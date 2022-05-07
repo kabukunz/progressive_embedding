@@ -4,7 +4,8 @@
 #include <igl/adjacency_list.h>
 
 #include <igl/copyleft/cgal/orient2D.h>
-#include <igl/copyleft/cgal/ear_clipping.h>
+// #include <igl/copyleft/cgal/ear_clipping.h>
+#include <igl/predicates/ear_clipping.h>
 #include "is_simple_polygon.h"
 #include <iostream>
 
