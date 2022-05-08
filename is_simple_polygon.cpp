@@ -93,10 +93,13 @@ bool disjoint_segment_intersect(
     double b[2] = {std::get<0>(std::get<1>(s1)),std::get<1>(std::get<1>(s1))};
     double c[2] = {std::get<0>(std::get<0>(s2)),std::get<1>(std::get<0>(s2))};
     double d[2] = {std::get<0>(std::get<1>(s2)),std::get<1>(std::get<1>(s2))};
-    Eigen::Vector2d va = Eigen::Vector2d(a[0],a[1]);
-    Eigen::Vector2d vb = Eigen::Vector2d(b[0],b[1]);
-    Eigen::Vector2d vc = Eigen::Vector2d(c[0],c[1]);
-    Eigen::Vector2d vd = Eigen::Vector2d(d[0],d[1]);
+    
+    Eigen::Vector2d va, vb, vc, vd;
+    va << a[0],a[1];
+    vb << b[0],b[1];
+    vc << c[0],c[1];
+    vd << d[0],d[1];
+
     return igl::predicates::segment_segment_intersect(va,vb,vc,vd);
 }
 
