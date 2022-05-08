@@ -3,17 +3,36 @@ project(matchmaker)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-# libigl
-option(LIBIGL_WITH_OPENGL            "Use OpenGL"         ON)
-option(LIBIGL_WITH_OPENGL_GLFW       "Use GLFW"           ON)
-option(LIBIGL_WITH_CGAL              "Use CGAL"           ON)
-option(LIBIGL_WITH_TRIANGLE          "Use Triangle"       ON)
-option(LIBIGL_WITH_OPENGL_GLFW_IMGUI "Use ImGui"          ON)
-
-find_package(LIBIGL REQUIRED QUIET)
-
-set(THIRD_PARTY_DIR ${CMAKE_SOURCE_DIR}/ext)
 include(DownloadProject)
+set(THIRD_PARTY_DIR ${CMAKE_SOURCE_DIR}/ext)
+
+# libigl
+download_project(
+    PROJ         libigl
+    SOURCE_DIR   ${THIRD_PARTY_DIR}/libigl
+    DOWNLOAD_DIR ${THIRD_PARTY_DIR}/.cache/libigl
+    QUIET
+    GIT_REPOSITORY https://github.com/kabukunz/libigl.git
+    GIT_TAG        v2.2.0
+)
+
+# libigl
+# option(LIBIGL_WITH_OPENGL ON CACHE BOOL " " FORCE)
+# option(LIBIGL_WITH_OPENGL_GLFW ON CACHE BOOL " " FORCE)
+# option(LIBIGL_WITH_CGAL ON CACHE BOOL " " FORCE)
+# option(LIBIGL_WITH_TRIANGLE ON CACHE BOOL " " FORCE)
+# option(LIBIGL_WITH_PREDICATES ON CACHE BOOL " " FORCE)
+# option(LIBIGL_WITH_OPENGL_GLFW_IMGUI ON CACHE BOOL " " FORCE)
+
+# find_package(LIBIGL REQUIRED QUIET)
+add_subdirectory(${THIRD_PARTY_DIR}/libigl libigl)
+include_directories(${THIRD_PARTY_DIR}/libigl/include)
+include_directories(${THIRD_PARTY_DIR}/libigl/external/predicates)
+# include_directories(${THIRD_PARTY_DIR}/libigl/include/igl/predicates)
+
+# ext/libigl/external/predicates/predicates.h
+
+# tbb
 download_project(
     PROJ         tbb
     SOURCE_DIR   ${THIRD_PARTY_DIR}/tbb
@@ -83,6 +102,7 @@ add_executable(random_init_bin ${RANDOMINIT_FILES})
 
 target_link_libraries(progressive_embedding igl::core igl::triangle igl::opengl_glfw igl::cgal igl::opengl_glfw_imgui tbb_static)
 target_link_libraries(shor_van_wyck igl::core igl::triangle igl::cgal igl::opengl_glfw igl::opengl_glfw_imgui)
+
 target_include_directories(progressive_embedding SYSTEM PUBLIC ${THIRD_PARTY_DIR}/tbb/include)
 
 target_link_libraries(matchmaker_bin progressive_embedding shor_van_wyck)

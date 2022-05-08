@@ -18,7 +18,8 @@
 #include "progressive_embedding.h"
 
 #include <igl/facet_components.h>
-#include <igl/copyleft/cgal/point_inside_polygon.h>
+#include <igl/predicates/point_inside_convex_polygon.h>
+// #include <igl/copyleft/cgal/point_inside_polygon.h>
 
 void boundary_straightening(
   Eigen::MatrixXd& P
@@ -469,7 +470,7 @@ void post_processing(
       // if any interior vertex is landing outside, move it to the barycenter
       for(int id = 0;id<Puv[k].rows();id++){
         Eigen::RowVector2d pt = Puv[k].row(id);
-        if(!BI(id) && !igl::copyleft::cgal::point_inside_polygon(fix_pos,pt))
+        if(!BI(id) && !igl::predicates::point_inside_convex_polygon(fix_pos,pt))
           Puv[k].row(id) << bc;
       }
       // std::vector<Object> Os = {Object(PV[k],kF,OTYPE::MESH),
