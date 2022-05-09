@@ -467,15 +467,18 @@ void post_processing(
       for(int i=0;i<fix.rows();i++)
         BI(fix(i)) = 1;
       
+      // NOTE: predicates interface is different from cgal one
+      // check igl/predicates/ear_clipping.cpp for an example
+      Eigen::Matrix<double,-1,2> fix_pos_pd(fix_pos.rows(),2);
+      fix_pos_pd.col(0) = fix_pos.col(0);
+      fix_pos_pd.col(1) = fix_pos.col(1);
+
       // if any interior vertex is landing outside, move it to the barycenter
       for(int id = 0;id<Puv[k].rows();id++){
-        Eigen::RowVector2d pt = Puv[k].row(id);
-        Eigen::MatrixXd fix_pos2d(fix_pos.rows(),2);
-        fix_pos2d.col(0) = fix_pos.col(0);
-        fix_pos2d.col(1) = fix_pos.col(1);
-        Eigen::Vector2d pt_2d = pt.transpose();
-
-        if(!BI(id) && !igl::predicates::point_inside_convex_polygon(fix_pos2d,pt_2d))
+        // Eigen::RowVector2d pt = Puv[k].row(id);
+        Eigen::Matrix<double,1,2> pt;
+        pt << Puv[k].row(id);
+        if(!BI(id) && !igl::predicates::point_inside_convex_polygon(fix_pos_pd,pt))
           Puv[k].row(id) << bc;
       }
       // std::vector<Object> Os = {Object(PV[k],kF,OTYPE::MESH),
